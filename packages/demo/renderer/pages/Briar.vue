@@ -6,6 +6,8 @@ import { CHANNEL, getDebug, setTitle, WINDOW_NAME } from '@demo/utils';
 const debug = getDebug('Briar');
 const events = useEvents();
 
+events.emit(WINDOW_NAME.APP + '112', 'test');
+
 onMounted(() => {
   document.title = 'Briar';
 });
@@ -40,6 +42,9 @@ events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
 
   return CHANNEL.RENDERER_INVOKE_ONE_TO_ALL;
 });
+events.handle('main',CHANNEL.RENDERER_SEND_TO_SELF, (res,t)=> {
+  console.log('来自主进程的消息', res)
+})
 </script>
 
 <template>

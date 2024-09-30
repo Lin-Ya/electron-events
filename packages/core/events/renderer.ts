@@ -7,7 +7,7 @@ import {
   EventType,
   EVENT_CENTER
 } from '../utils';
-import type { IpcEventIdentifier, IpcEventArgs } from '../models';
+import type { IpcEventIdentifier, IpcEventArgs, GetResult } from '../models';
 
 interface RendererEventCenterParams {
   type?: EventType;
@@ -105,7 +105,7 @@ export class RendererIpcEvents extends IpcEvents {
     windowName: string | string[],
     eventName: K,
     ...args: IpcEventArgs<K>
-  ) {
+  ):Promise<GetResult<K>> {
     return ipcRenderer.invoke(EVENT_CENTER, {
       type: EventType.RESPONSIVE,
       toName: windowName,

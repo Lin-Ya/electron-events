@@ -1,8 +1,10 @@
 import type { EventKey } from '@core/index';
 
-export const RENDERER_SEND_TO_SELF: EventKey = '0';
+type TT = (name:string,age:object)=> string
 
-export const RENDERER_SEND_TO_MAIN: EventKey = '1';
+export const RENDERER_SEND_TO_SELF: EventKey<Parameters<TT>> = '0';
+
+export const RENDERER_SEND_TO_MAIN: EventKey<string, number> = '1';
 
 export const RENDERER_SEND_ONE_TO_ONE: EventKey = '2';
 
@@ -12,7 +14,7 @@ export const RENDERER_SEND_ONE_TO_ALL: EventKey = '4';
 
 export const RENDERER_INVOKE_TO_SELF: EventKey = '5';
 
-export const RENDERER_INVOKE_TO_MAIN: EventKey = '6';
+export const RENDERER_INVOKE_TO_MAIN: EventKey<number, null> = '6';
 
 export const RENDERER_INVOKE_ONE_TO_ONE: EventKey = '7';
 

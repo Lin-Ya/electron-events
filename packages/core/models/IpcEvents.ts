@@ -11,14 +11,14 @@ import { ANY_WINDOW_SYMBOL, SELF_NAME, ErrorCode } from '@core/utils';
 
 export type AnyFunction = (...args: any[]) => any;
 
-export interface EventStringKey<_T> extends String {}
+export interface EventStringKey<_T, R = any> extends String {}
 
-export interface EventArrayKey<_T> extends Array<string> {}
+export interface EventArrayKey<_T, R = any> extends Array<string> {}
 
-export type EventKey<T = []> = EventStringKey<T> | EventArrayKey<T>;
+export type EventKey<T = [], R = any> = EventStringKey<T, R> | EventArrayKey<T, R>;
 
-export type IpcEventIdentifier<T extends Array<any> = []> =
-  | EventKey<T>
+export type IpcEventIdentifier<T extends Array<any> = [], R = any> =
+  | EventKey<T, R>
   | string
   | string[];
 
@@ -28,13 +28,16 @@ export type IpcEventArgs<T> = T extends EventKey<infer V>
     : [V]
   : any[];
 
-export interface EventHandler<T = any[]> {
-  (...args: T extends Array<any> ? T : [T]): any;
+export interface EventHandler<T = any[], R = any> {
+  (...args: T extends Array<any> ? T : [T]): R;
 }
 
-export type IpcEventHandler<T> = T extends EventKey<infer V>
-  ? EventHandler<V>
+export type IpcEventHandler<T> = T extends EventKey<infer V, infer R>
+  ? EventHandler<V, R>
   : EventHandler;
+
+
+export type GetResult<T> = T extends EventKey<infer _, infer R> ? R : any
 
 interface NormalizeOnArg {
   windowNames: string[];

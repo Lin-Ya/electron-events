@@ -90,6 +90,8 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_TO_MAIN, () => {
     WINDOW_NAME.APP,
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_TO_MAIN}.`
   );
+
+  return 1
 });
 
 events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
@@ -100,13 +102,22 @@ events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ALL, () => {
   );
 });
 
-events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_TO_MAIN, () => {
+events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_TO_MAIN, (q) => {
+
   debug(
     WINDOW_NAME.APP,
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_INVOKE_TO_MAIN}.`
   );
 
-  return CHANNEL.RENDERER_INVOKE_TO_MAIN;
+  console.log('收到来自 渲染进程 App 窗口的消息')
+  setTimeout(()=> {
+    events.invokeTo(WINDOW_NAME.BRIAR,CHANNEL.RENDERER_SEND_TO_SELF, '',{})
+  })
+
+  return null
+
+  // return {ww 123, cc: '123'}
+  // return CHANNEL.RENDERER_INVOKE_TO_MAIN;
 });
 
 events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {

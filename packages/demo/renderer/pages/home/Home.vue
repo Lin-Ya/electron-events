@@ -24,7 +24,7 @@ const createWindow = (windowInfo: WindowInfo) => {
 const sendWindowEvent = (windowInfo: WindowInfo) => {
   switch (windowInfo.name) {
     case 'App':
-      events.emit(CHANNEL.RENDERER_SEND_TO_SELF);
+      events.emit(CHANNEL.RENDERER_SEND_TO_SELF, 'test',{});
       break;
     case 'Bramble':
       events.emitTo(WINDOW_NAME.BRAMBLE, CHANNEL.RENDERER_SEND_ONE_TO_ONE);
@@ -65,7 +65,8 @@ const invokeWindowsEvent = async () => {
   setTitle(JSON.stringify(titles));
 };
 const invokeMainEvent = async () => {
-  const title = await events.invokeTo('main', CHANNEL.RENDERER_INVOKE_TO_MAIN);
+  const title = await events.invokeTo('main', CHANNEL.RENDERER_INVOKE_TO_MAIN, 1);
+  debugger
 
   setTitle(title);
 };
@@ -133,7 +134,6 @@ events.handle(CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
     <button
       v-for="{ type, content } in mainButtonList"
       :key="type"
-      disabled
       @click="triggerMainEvent({ type })"
     >
       {{ content }}
