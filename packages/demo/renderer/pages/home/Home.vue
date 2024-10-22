@@ -112,6 +112,13 @@ events.handle(CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
 
   return CHANNEL.RENDERER_INVOKE_ONE_TO_ALL;
 });
+
+function handle(params: any) {
+  console.log('from main,to app', params);
+  // @error 出现无法取消监听，第二次触发依旧会进入 handle 函数的执行。
+  events.off('main', TEST_CHANNEL, handle);
+}
+events.on('main', TEST_CHANNEL, handle);
 </script>
 
 <template>
@@ -133,7 +140,6 @@ events.handle(CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
     <button
       v-for="{ type, content } in mainButtonList"
       :key="type"
-      disabled
       @click="triggerMainEvent({ type })"
     >
       {{ content }}

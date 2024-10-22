@@ -58,6 +58,7 @@ function testHandler(params: TestChannelInfo) {
 
 ipcMain.handle(TEST_CHANNEL, (_, payload: TestChannelPayload) => {
   const { type } = payload;
+  console.log('主进程开始处理', type, payload);
 
   switch (type) {
     case TestChannelType.CREATE_WINDOW: {
@@ -116,4 +117,14 @@ events.handle(WINDOW_NAME.APP, CHANNEL.RENDERER_INVOKE_ONE_TO_ALL, () => {
   );
 
   return CHANNEL.RENDERER_INVOKE_ONE_TO_ALL;
+});
+
+events.on(WINDOW_NAME.APP, TEST_CHANNEL, (params: any) => {
+  const type = params.type
+  switch (type) {
+    case 'someone':
+      events.emitTo(WINDOW_NAME.APP, TEST_CHANNEL, 'message from main' );
+      break;
+    default:
+  }
 });

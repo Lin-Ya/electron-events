@@ -10,13 +10,17 @@ onMounted(() => {
   setTitle(WINDOW_NAME.BRAMBLE);
 });
 
-events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, () => {
+function handle() {
   setTitle(CHANNEL.RENDERER_SEND_ONE_TO_ONE);
   debug(
     WINDOW_NAME.APP,
     `Received a message from ${WINDOW_NAME.APP} on channel ${CHANNEL.RENDERER_SEND_ONE_TO_ONE}.`
   );
-});
+  // @error 出现无法取消监听，第二次触发依旧会进入 handle 函数的执行。
+  events.off(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, handle);
+}
+events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_ONE, handle);
+
 events.on(WINDOW_NAME.APP, CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL, () => {
   setTitle(CHANNEL.RENDERER_SEND_ONE_TO_SEVERAL);
   debug(
